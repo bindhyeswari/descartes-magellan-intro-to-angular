@@ -30,6 +30,13 @@
                 // for Rashmika's reference
                 console.log(event);
             };
+            $scope.getPage = function (event) {
+                event.preventDefault();
+                var prop = event.target.getAttribute('data-nav');
+                if (prop in link) {
+
+                }
+            };
         }).filter('firstletter', function () {
             return function (inp) {
                 return inp.replace(/\b[a-z]/gmi, function (l) {
@@ -55,6 +62,10 @@
     </div>
 
     <div ng-controller="MyController">
+
+        <a href="{{link.next}}" data-nav="next" ng-click="getPage($event)">Next</a>
+        <a href="{{link.first}}" data-nav="first" ng-click="getPage($event)">Next</a>
+
         {{message | firstletter}}
         <ul>
             <li ng-repeat="name in names">{{name}}</li>

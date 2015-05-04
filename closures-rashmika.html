@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <script>
+
+        var x = 10;
+        function createClosure() {
+            var y = 11;
+            var f = function () {
+                var z = 12;
+                return {
+                    x: x++,
+                    y: y++,
+                    z: z++
+                };
+            };
+            return f;
+        }
+
+        var fn = createClosure();
+        var fnx = createClosure();
+
+        console.log(fn());
+        console.log(fnx());
+
+
+
+
+    </script>
+</head>
+<body>
+
+</body>
+</html>
