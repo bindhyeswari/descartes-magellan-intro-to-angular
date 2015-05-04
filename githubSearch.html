@@ -13,6 +13,7 @@
         angular.module('myApp', []).controller('MyController', function ($scope, $http) {
             $scope.search = '';
             $scope.link = {};
+            $scope.orderProperty = '';
 
             $scope.searchForTerm = function (event) {
                 if (event.keyCode === 13) {
@@ -52,13 +53,22 @@
 <div ng-controller="MyController">
     <h1>Enter the search term</h1>
     <input type="text" ng-model="search" ng-keydown="searchForTerm($event)"/>
-    <div class="btn-group" role="group">
-        <button type="button" class="btn btn-default" ng-click="getPage(link.prev)">Prev</button>
-        <button type="button" class="btn btn-default" ng-click="getPage(link.next)">Next</button>
+    <div class="panel">
+        <div class="btn-group" role="group">
+            <button type="button" class="btn btn-default" ng-click="getPage(link.prev)">Prev</button>
+            <button type="button" class="btn btn-default" ng-click="getPage(link.next)">Next</button>
+        </div>
+    </div>
+    <div class="panel">
+        Orderby:
+        <div class="btn-group" role="group">
+            <button type="button" class="btn btn-default" ng-click="orderProperty = '-forks'">Forks</button>
+            <button type="button" class="btn btn-default" ng-click="orderProperty = '-open_issues_count'">Open Issues</button>
+        </div>
     </div>
     <h1>Results</h1>
     <ul class="row">
-        <li class="col-lg-4 col-md-4 col-xs-12" ng-repeat="repo in repositories">
+        <li class="col-lg-4 col-md-4 col-xs-12" ng-repeat="repo in repositories | orderBy: orderProperty">
             <div class="row results-grid-col">
                 <div class="col-lg-4">
                     <img style="width: 100%;" ng-src="{{repo.owner.avatar_url}}" alt="{{repo.owner.login}}"/>
