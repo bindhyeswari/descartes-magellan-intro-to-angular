@@ -10,7 +10,7 @@
     <script src="bower_components/angular/angular.js"></script>
     <script>
         angular.module('myApp', []).controller('MyController', function ($scope, $http) {
-            $scope.message = 'Hello World from AngularJS';
+            $scope.message = 'hello world from angularjs';
             $scope.names = ['Aditya', 'Raymond', 'Jui', 'Chris', 'Nina', 'Rashmika'];
             $scope.name = 'Aditya';
             $scope.updateName = function () {
@@ -30,6 +30,12 @@
                 // for Rashmika's reference
                 console.log(event);
             };
+        }).filter('firstletter', function () {
+            return function (inp) {
+                return inp.replace(/\b[a-z]/gmi, function (l) {
+                    return l.toUpperCase();
+                });
+            }
         });
     </script>
     <script></script>
@@ -49,7 +55,7 @@
     </div>
 
     <div ng-controller="MyController">
-        {{message}}
+        {{message | firstletter}}
         <ul>
             <li ng-repeat="name in names">{{name}}</li>
         </ul>

@@ -12,13 +12,35 @@
     <script>
         angular.module('myApp', []).controller('MyController', function ($scope, $http) {
             $scope.search = '';
+            $scope.link = {};
 
             $scope.searchForTerm = function (event) {
                 if (event.keyCode === 13) {
-                    $http.get('https://api.github.com/search/repositories?q=' + $scope.search).success(function (data, status, headers) {
-                        $scope.repositories = data.items;
-                    });
+                    getPage('https://api.github.com/search/repositories?q=' + $scope.search);
                 }
+            };
+
+            $scope.getPage = getPage;
+
+            function getPage(url) {
+                $http.get(url).success(function (data, status, headers) {
+                    $scope.repositories = data.items;
+                    $scope.link = getLinkObject(headers('Link'));
+                    console.log($scope.link);
+                    // parse the link header string -->  headers('Link')
+                });
+            }
+
+            function getLinkObject(headerstring) {
+                return headerstring.match(/<[^>]+>;\s?rel="[^"]+"/gmi).map(function (match) {
+                    var parts = /<([^>]+)>;\s?rel="([^"]+)"/gmi.exec(match);
+                    return parts;
+                }).reduce(function(obj, arr) {
+                    var prop = arr[2];
+                    var val = arr[1];
+                    obj[prop] = val;
+                    return obj;
+                }, {});
             }
 
         });
@@ -30,7 +52,10 @@
 <div ng-controller="MyController">
     <h1>Enter the search term</h1>
     <input type="text" ng-model="search" ng-keydown="searchForTerm($event)"/>
-
+    <div class="btn-group" role="group">
+        <button type="button" class="btn btn-default" ng-click="getPage(link.prev)">Prev</button>
+        <button type="button" class="btn btn-default" ng-click="getPage(link.next)">Next</button>
+    </div>
     <h1>Results</h1>
     <ul class="row">
         <li class="col-lg-4 col-md-4 col-xs-12" ng-repeat="repo in repositories">
