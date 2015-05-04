@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html ng-app="myApp">
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Hello World for Angular</title>
+    <link rel="stylesheet" href="base.css"/>
+    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css"/>
+    <script src="bower_components/jquery/dist/jquery.js"></script>
+    <script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
+    <script src="bower_components/angular/angular.js"></script>
+    <script>
+        angular.module('myApp', []).controller('MyController', function ($scope, $http) {
+            $scope.search = '';
+
+            $scope.searchForTerm = function (event) {
+                if (event.keyCode === 13) {
+                    $http.get('https://api.github.com/search/repositories?q=' + $scope.search).success(function (data, status, headers) {
+                        $scope.repositories = data.items;
+                    });
+                }
+            }
+
+        });
+    </script>
+    <script></script>
+</head>
+<body>
+
+<div ng-controller="MyController">
+    <h1>Enter the search term</h1>
+    <input type="text" ng-model="search" ng-keydown="searchForTerm($event)"/>
+
+    <h1>Results</h1>
+    <ul class="row">
+        <li class="col-lg-4 col-md-4 col-xs-12" ng-repeat="repo in repositories">
+            <div class="row">
+                <div class="col-lg-4">
+                    <img style="width: 100%;" ng-src="{{repo.owner.avatar_url}}" alt="{{repo.owner.login}}"/>
+                </div>
+                <div class="col-lg-8">
+                    <ul>
+                        <li>{{repo.full_name}}</li>
+                        <li>Forks: {{repo.forks_count}}</li>
+                        <li>Open Issues: {{repo.open_issues_count}}</li>
+                    </ul>
+                </div>
+            </div>
+        </li>
+    </ul>
+</div>
+
+</body>
+</html>

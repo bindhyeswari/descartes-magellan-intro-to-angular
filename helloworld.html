@@ -25,7 +25,11 @@
                 if (event.keyCode === 13) {
                     console.log($scope.search);
                 }
-            }
+            };
+            $scope.printEvent = function (event) {
+                // for Rashmika's reference
+                console.log(event);
+            };
         });
     </script>
     <script></script>
@@ -49,8 +53,10 @@
         <ul>
             <li ng-repeat="name in names">{{name}}</li>
         </ul>
-        <input type="text" ng-model="name"/>
+        <input type="text" ng-model="name" ng-change="isData=!name"/>
 
+        <div ng-show="isData">The input box is empty</div>
+        <div ng-hide="isData">The input box is not empty</div>
         <input type="text" ng-keydown="printData($event)" ng-model="search"/>
 
         <div>The name within the input box is {{name}}</div>
